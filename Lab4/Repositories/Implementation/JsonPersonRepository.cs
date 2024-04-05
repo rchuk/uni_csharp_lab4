@@ -6,6 +6,7 @@ namespace Lab4.Repositories.Implementation;
 
 public class JsonPersonRepository : IPersonRepository
 {
+    private readonly SemaphoreSlim _saveLock = new (1);
     private readonly string _filename;
     private Dictionary<int, Person> _persons = new ();
     private int _counter;
@@ -19,6 +20,8 @@ public class JsonPersonRepository : IPersonRepository
     {
         var id = _counter++;
         _persons.Add(id, new Person(person));
+
+        await Save();
         
         return id;
     }
@@ -31,6 +34,8 @@ public class JsonPersonRepository : IPersonRepository
     public async Task ReplacePerson(int id, Person person)
     {
         _persons[id] = new Person(person);
+
+        await Save();
     }
 
     public async Task<IEnumerable<KeyValuePair<int, Person>>> GetPersonList(PersonCriteria? criteria = null)
@@ -69,6 +74,8 @@ public class JsonPersonRepository : IPersonRepository
     public async Task RemovePerson(int id)
     {
         _persons.Remove(id);
+
+        await Save();
     }
     
     private static IOrderedEnumerable<TSource> OrderBy<TSource, TKey>(IEnumerable<TSource> source, Func<TSource, TKey> keySelector, bool isAscending)
@@ -78,14 +85,19 @@ public class JsonPersonRepository : IPersonRepository
 
     public async Task Save()
     {
-        var data = new RepositoryData(_counter, _persons);
+        await _saveLock.WaitAsync();
+        try {
+            var data = new RepositoryData(_counter, _persons);
         
-        await using var stream = File.Create(_filename);
-        await JsonSerializer.SerializeAsync(
-            stream,
-            data,
-            new JsonSerializerOptions { WriteIndented = true }
-        );
+            await using var stream = File.Create(_filename);
+            await JsonSerializer.SerializeAsync(
+                stream,
+                data,
+                new JsonSerializerOptions { WriteIndented = true }
+            );
+        } finally {
+            _saveLock.Release();
+        }
     }
 
     public async Task<bool> Load()

@@ -40,25 +40,6 @@ public partial class MainWindow : Window
         
         NavigationService.Navigate(new PersonListView());
     }
-
-    private async Task OnShutdown()
-    {
-        await ((WindowDataContext)DataContext).JsonPersonRepository.Save();
-    }
-    
-    protected override async void OnClosing(CancelEventArgs e)
-    {
-        if (_isClosing)
-        {
-            base.OnClosing(e);
-            return;
-        }
-       
-        e.Cancel = true;
-        await OnShutdown();
-        _isClosing = true;
-        Close();
-    }
     
     public static NavigationService NavigationService => ((MainWindow)Application.Current.MainWindow).MainFrame.NavigationService;
     public static WindowDataContext WindowContext => (WindowDataContext)Application.Current.MainWindow.DataContext;
