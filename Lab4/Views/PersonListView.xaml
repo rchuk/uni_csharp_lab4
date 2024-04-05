@@ -1,0 +1,163 @@
+﻿<Page x:Class="Lab4.Views.PersonListView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="clr-namespace:Lab4.ViewModels"
+      xmlns:common="clr-namespace:Lab4.Views.Common"
+      mc:Ignorable="d"
+      Title="PersonListView"
+      HorizontalAlignment="Stretch"
+      VerticalAlignment="Stretch">
+    <d:Page.DataContext>
+        <local:PersonListViewModel />
+    </d:Page.DataContext>
+    
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Button Content="Test Clear" Padding="2" HorizontalAlignment="Left"
+                    Command="{Binding TestClearCommand}" />
+            <Button Content="Create Person" Padding="2" HorizontalAlignment="Right"
+                    Command="{Binding CreateCommand}" />
+        </Grid>
+        <ListView Grid.Row="1" Margin="0 10 0 0" ItemsSource="{Binding Persons}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Width="60" DisplayMemberBinding="{Binding Key}">
+                        <GridViewColumnHeader>
+                            <StackPanel Orientation="Horizontal">
+                                <common:DropdownFilter
+                                    SelectionMode="Single"
+                                    SelectionItems="{Binding Path=DataContext.SortFieldSelectionItems, RelativeSource={RelativeSource AncestorType=Page}}"
+                                    OnItemsSelected="{Binding Path=DataContext.SortFieldSelectCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                    />
+                                <common:DropdownFilter
+                                    SelectionMode="Single"
+                                    SelectionItems="{Binding Path=DataContext.SortDirectionSelectionItems, RelativeSource={RelativeSource AncestorType=Page}}"
+                                    OnItemsSelected="{Binding Path=DataContext.SortDirectionSelectCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                />
+                            </StackPanel>
+                        </GridViewColumnHeader>
+                    </GridViewColumn>
+                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding Value.FirstName}">
+                        <GridViewColumnHeader>
+                            <StackPanel Orientation="Horizontal">
+                                <Label>First name</Label>
+                                <common:DropdownSearchFilter
+                                    OnItemsSelected="{Binding Path=DataContext.FirstNameSelectCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                />
+                            </StackPanel>
+                        </GridViewColumnHeader>
+                    </GridViewColumn>
+                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding Value.LastName}">
+                        <GridViewColumnHeader>
+                            <StackPanel Orientation="Horizontal">
+                                <Label>Last name</Label>
+                                <common:DropdownSearchFilter
+                                    OnItemsSelected="{Binding Path=DataContext.LastNameSelectCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                />
+                            </StackPanel>
+                        </GridViewColumnHeader>
+                    </GridViewColumn>
+                    <GridViewColumn Width="180" DisplayMemberBinding="{Binding Value.Email}">
+                        <GridViewColumnHeader>
+                            <StackPanel Orientation="Horizontal">
+                                <Label>Email</Label>
+                                <common:DropdownSearchFilter
+                                    OnItemsSelected="{Binding Path=DataContext.EmailSelectCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                />
+                            </StackPanel>
+                        </GridViewColumnHeader>
+                    </GridViewColumn>
+                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding Value.BirthDate, StringFormat={}{0:dd.MM.yyyy}}">
+                        <GridViewColumnHeader>
+                            <StackPanel Orientation="Horizontal">
+                                <Label>Birth date</Label>
+                                <common:DropdownDateRangeFilter
+                                    OnItemsSelected="{Binding Path=DataContext.BirthDateSelectCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                />
+                            </StackPanel>
+                        </GridViewColumnHeader>
+                    </GridViewColumn>
+                    <GridViewColumn Width="60" DisplayMemberBinding="{Binding Value.Age}">
+                        <GridViewColumnHeader>
+                            <StackPanel Orientation="Horizontal">
+                                <Label>Age</Label>
+                                <common:DropdownRangeFilter
+                                    OnItemsSelected="{Binding Path=DataContext.AgeSelectCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                    />
+                            </StackPanel>
+                        </GridViewColumnHeader>
+                    </GridViewColumn>
+                    <GridViewColumn Width="75">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid HorizontalAlignment="Stretch">
+                                    <CheckBox IsChecked="{Binding Value.IsAdult}" IsHitTestVisible="False" Focusable="False" />
+                                </Grid>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>   
+                        <GridViewColumnHeader>
+                            <StackPanel Orientation="Horizontal">
+                                <Label>Adult</Label>
+                                <common:DropdownFilter
+                                    SelectionMode="Multiple"
+                                    SelectionItems="{Binding Path=DataContext.IsAdultSelectionItems, RelativeSource={RelativeSource AncestorType=Page}}"
+                                    OnItemsSelected="{Binding Path=DataContext.IsAdultSelectCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                />
+                            </StackPanel>
+                        </GridViewColumnHeader>
+                    </GridViewColumn>
+                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding Value.ChineseSign}">
+                        <GridViewColumnHeader>
+                            <StackPanel Orientation="Horizontal">
+                                <Label>Chinese sign</Label>
+                                <common:DropdownFilter
+                                    SelectionMode="Multiple"
+                                    SelectionItems="{Binding Path=DataContext.ChineseSignSelectionItems, RelativeSource={RelativeSource AncestorType=Page}}"
+                                    OnItemsSelected="{Binding Path=DataContext.ChineseSignSelectCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                    />
+                            </StackPanel>
+                        </GridViewColumnHeader>
+                    </GridViewColumn>
+                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding Value.SunSign}">
+                        <GridViewColumnHeader>
+                            <StackPanel Orientation="Horizontal">
+                                <Label>Sun sign</Label>
+                                <common:DropdownFilter
+                                    SelectionMode="Multiple"
+                                    SelectionItems="{Binding Path=DataContext.SunSignSelectionItems, RelativeSource={RelativeSource AncestorType=Page}}"
+                                    OnItemsSelected="{Binding Path=DataContext.SunSignSelectCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                />
+                            </StackPanel>
+                        </GridViewColumnHeader>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Actions" Width="125">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel HorizontalAlignment="Stretch" Orientation="Horizontal">
+                                    <Button Content="View" 
+                                            Command="{Binding Path=DataContext.ViewCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                            CommandParameter="{Binding Key}"
+                                            Margin="2.5 0" Padding="2"/>
+                                    <Button Content="Edit"
+                                            Command="{Binding Path=DataContext.EditCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                            CommandParameter="{Binding Key}"
+                                            Margin="2.5 0" Padding="2" />
+                                    <Button Content="Delete"
+                                            Command="{Binding Path=DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                            CommandParameter="{Binding Key}"
+                                            Margin="2.5 0" Padding="2" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </Grid>
+</Page>

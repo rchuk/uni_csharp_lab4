@@ -1,0 +1,27 @@
+﻿<UserControl x:Class="Lab4.Views.Common.DropdownRangeFilter"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Lab4.Views.Common"
+             mc:Ignorable="d">
+    <UserControl.DataContext>
+        <Binding RelativeSource="{RelativeSource Self}" />
+    </UserControl.DataContext>
+
+    <Expander x:Name="Expander">
+        <Popup PlacementTarget="{Binding ElementName=Expander}"
+               Placement="Bottom"
+               StaysOpen="False"
+               IsOpen="{Binding IsExpanded, ElementName=Expander}">
+            <StackPanel>
+                <Button x:Name="ResetButton" Click="ResetButton_OnClick" Margin="2">Reset</Button>
+                <StackPanel Orientation="Horizontal">
+                    <TextBox x:Name="MinText" Width="50" />
+                    <TextBox x:Name="MaxText" Width="50" />
+                </StackPanel>
+                <Button x:Name="ApplyButton" Click="ApplyButton_OnClick" Margin="2">Apply</Button>
+            </StackPanel>
+        </Popup>
+    </Expander>
+</UserControl>
